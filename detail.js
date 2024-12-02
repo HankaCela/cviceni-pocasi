@@ -1,7 +1,13 @@
 const detailContainer = document.getElementById("detail");
 const hash = window.location.hash.slice(1); // Získání názvu dne z URL
 
-const detailData = predpoved.find((den) => den.den === hash);
+// Funkce pro odstranění diakritiky a převedení na malá písmena
+function normalizeString(str) {
+  return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+}
+
+const normalizedHash = normalizeString(hash);
+const detailData = predpoved.find((den) => normalizeString(den.den) === normalizedHash);
 
 if (detailData) {
   detailContainer.innerHTML = `
@@ -16,4 +22,5 @@ if (detailData) {
   `;
 } else {
   detailContainer.innerHTML = `<p>Data pro tento den nejsou dostupná.</p>`;
+  console.error("Data nenalezena pro:", hash);
 }
