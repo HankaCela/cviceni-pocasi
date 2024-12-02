@@ -1,12 +1,15 @@
 const detailContainer = document.getElementById("detail");
-const hash = window.location.hash.slice(1); // Získání názvu dne z URL
+const hash = decodeURIComponent(window.location.hash.slice(1)); // Dekódování hash z URL
 
-// Funkce pro odstranění diakritiky a převedení na malá písmena
+console.log("Hash z URL:", hash); // Pro kontrolu načtení hash
+
 function normalizeString(str) {
   return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 }
 
 const normalizedHash = normalizeString(hash);
+console.log("Normalizovaný hash:", normalizedHash);
+
 const detailData = predpoved.find((den) => normalizeString(den.den) === normalizedHash);
 
 if (detailData) {
@@ -20,7 +23,8 @@ if (detailData) {
     <p>Rychlost větru: ${detailData.rychlost_vetru} km/h</p>
     <p>${detailData.popis_pocasi}</p>
   `;
+  console.log("Data nalezena:", detailData); // Ladicí výstup dat
 } else {
   detailContainer.innerHTML = `<p>Data pro tento den nejsou dostupná.</p>`;
-  console.error("Data nenalezena pro:", hash);
+  console.error("Data pro daný den nebyla nalezena:", hash);
 }
